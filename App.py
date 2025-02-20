@@ -38,6 +38,7 @@ def save_to_airtable(user, message, timestamp):
 def slack_event():
     event_data = request.json
     
+    # Répondre au challenge de validation de Slack
     if "challenge" in event_data:
         return jsonify({"challenge": event_data["challenge"]})
     
@@ -54,4 +55,5 @@ def slack_event():
     return jsonify({"status": "Ignored"})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.getenv("PORT", 5000))  # Utilisation du port défini par Railway
+    app.run(host="0.0.0.0", port=port)
