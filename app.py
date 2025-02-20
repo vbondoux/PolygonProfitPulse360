@@ -1,8 +1,13 @@
 import os
+import logging
 import requests
 from flask import Flask, request, jsonify
 from datetime import datetime
 from dotenv import load_dotenv
+
+# Activer les logs Flask et Gunicorn
+logging.basicConfig(level=logging.DEBUG)
+app.logger.setLevel(logging.DEBUG)
 
 load_dotenv()
 
