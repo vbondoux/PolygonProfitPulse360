@@ -36,8 +36,14 @@ def save_to_airtable(notes, datetime_value):
             }
         ]
     }
+    
     response = requests.post(url, json=data, headers=headers)
-    return response.json()
+    response_json = response.json()
+    
+    app.logger.info(f"Airtable Response: {response.status_code} - {response_json}")  # LOG complet
+    
+    return response_json
+
 
 @app.route("/slack", methods=["POST"])
 def slack_event():
