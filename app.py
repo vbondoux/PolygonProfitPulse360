@@ -37,32 +37,42 @@ def save_to_airtable(notes, datetime_value):
         ]
     }
     
+    app.logger.info(f"📤 Sending to Airtable: {data}")  # LOG AVANT ENVOI
+    
     response = requests.post(url, json=data, headers=headers)
     response_json = response.json()
     
-    app.logger.info(f"Airtable Response: {response.status_code} - {response_json}")  # LOG complet
+    app.logger.info(f"✅ Airtable Response: {response.status_code} - {response_json}")  # LOG REPONSE
     
     return response_json
 
 
-@app.route("/slack", methods=["POST"])
-def slack_event():
-    event_data = request.json
 
-    # Vérifier si Slack envoie un challenge de validation
-    if "challenge" in event_data:
-        return jsonify({"challenge": event_data["challenge"]})
+def save_to_airtable(notes, datetime_value):
+    url = f"https://api.airtable.com/v0/{airtable_base_id}/{airtable_table_name}"
+    headers = {
+        "Authorization": f"Bearer {airtable_api_key}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "records": [
+            {
+                "fields": {
+                    "Notes": notes,
+                    "DateTime": datetime_value
+                }
+            }
+        ]
+    }
     
-    if "event" in event_data:
-        event = event_data["event"]
-        
-        if event.get("type") == "message" and "subtype" not in event:
-            notes = event.get("text", "")
-            datetime_value = datetime.utcfromtimestamp(float(event.get("ts", 0))).isoformat()
-            save_to_airtable(notes, datetime_value)
-            return jsonify({"status": "Message saved"})
+    app.logger.info(f"📤 Sending to Airtable: {data}")  # LOG AVANT ENVOI
     
-    return jsonify({"status": "Ignored"})
+    response = requests.post(url, json=data, headers=headers)
+    response_json = response.json()
+    
+    app.logger.info(f"✅ Airtable Response: {response.status_code} - {response_json}")  # LOG REPONSE
+    
+    return response_json
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))  # Utilisation du port défini par Railway
