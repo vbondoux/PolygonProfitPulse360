@@ -5,13 +5,14 @@ from flask import Flask, request, jsonify
 from datetime import datetime
 from dotenv import load_dotenv
 
-# Activer les logs Flask et Gunicorn
-logging.basicConfig(level=logging.DEBUG)
-app.logger.setLevel(logging.DEBUG)
-
 load_dotenv()
 
 app = Flask(__name__)
+
+
+# Activer les logs Flask et Gunicorn
+logging.basicConfig(level=logging.DEBUG)
+app.logger.setLevel(logging.DEBUG)
 
 # Configuration des clés API
 airtable_api_key = os.getenv("AIRTABLE_API_KEY")
