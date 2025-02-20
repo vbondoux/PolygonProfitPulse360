@@ -36,15 +36,20 @@ def save_to_airtable(notes, datetime_value):
             }
         ]
     }
-    
+
     app.logger.info(f"📤 Sending to Airtable: {data}")  # LOG AVANT ENVOI
-    
+
     response = requests.post(url, json=data, headers=headers)
     response_json = response.json()
-    
+
     app.logger.info(f"✅ Airtable Response: {response.status_code} - {response_json}")  # LOG REPONSE
-    
+
+    # Vérification si Airtable renvoie une erreur spécifique
+    if response.status_code != 200:
+        app.logger.error(f"❌ Airtable ERROR: {response_json}")  # LOG D'ERREUR DÉTAILLÉ
+
     return response_json
+
 
 
 @app.route("/slack", methods=["POST"])
